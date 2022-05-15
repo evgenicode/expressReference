@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require("path");
 const logger = require('./middleware/logger');
-const members = require('./Members');
+
 
 const app = express();
 
@@ -9,15 +9,12 @@ const app = express();
 // Init middleware
 app.use(logger);
 
-// Get All Members
-app.get('/api/members', (inRequest, inResponse) => {
-  inResponse.json(members);
-});
+// Body Parser Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-// Get Single Member
-app.get('/api/members/:id', (inRequest, inResponse) => {
-  inResponse.json(members.filter(item => item.id === parseInt(inRequest.params.id)));
-})
+// Members API Routes
+app.use('/api/members', require('./routes/api/members'));
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
