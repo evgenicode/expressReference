@@ -33,8 +33,8 @@ router.post('/', (inRequest, inResponse) => {
   }
 
   members.push(newMember);
-  inResponse.json(members);
-
+  // inResponse.json(members); // For API
+  inResponse.redirect('/');    // For Templates
 });
 
 
