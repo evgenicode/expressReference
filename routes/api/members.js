@@ -33,9 +33,42 @@ router.post('/', (inRequest, inResponse) => {
   }
 
   members.push(newMember);
-
   inResponse.json(members);
 
+});
+
+
+// Update Member
+router.put('/:id', (inRequest, inResponse) => {
+  const memberExists = members.some(item => item.id === parseInt(inRequest.params.id));
+  
+  if(memberExists) {
+    const updMember = inRequest.body;
+    members.forEach(item => {
+      if(item.id === parseInt(inRequest.params.id)) {
+        item.name = updMember.name ? updMember.name : item.name;
+        item.email = updMember.email ? updMember.email : item.email;
+
+        inResponse.json({ msg: "Member updated", item})
+      }
+    });
+  } else {
+    inResponse.status(400).json({ msg: `Member not found` });
+  }
+});
+
+// Delete Member
+router.delete('/:id', (inRequest, inResponse) => {
+  const memberExists = members.some(item => item.id === parseInt(inRequest.params.id));
+
+  if (memberExists) {
+    inResponse.json({
+      msg: 'Member deleted',
+      members: members.filter(item => item.id !== parseInt(inRequest.params.id))
+    });
+  } else {
+    inResponse.status(400).json({ msg:"Member doesn't exist" });
+  }
 });
 
 module.exports = router;
